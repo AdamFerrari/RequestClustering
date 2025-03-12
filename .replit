@@ -1,0 +1,37 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "CLI Clustering Tool"
+
+[[workflows.workflow]]
+name = "CLI Clustering Tool"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py issues.csv"
+
+[deployment]
+run = ["sh", "-c", """
+echo \"id,title,description
+1,Python Tutorial,Learn Python programming basics
+2,Data Science Guide,Introduction to data analysis
+3,ML Course,Machine learning fundamentals\" > test.csv && python main.py test.csv"""]
